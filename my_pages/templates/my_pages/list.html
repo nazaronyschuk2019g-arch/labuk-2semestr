@@ -1,0 +1,26 @@
+<h1>Cloud City Shop</h1>
+
+<h3>Категорії:</h3>
+<ul>
+    <li><a href="/">Всі товари</a></li>
+    {% for c in categories %}
+        <li><a href="/category/{{ c.id }}/">{{ c.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h3>Товари:</h3>
+<div style="display: flex; gap: 20px;">
+    {% for product in products %}
+        <div style="border: 1px solid #ccc; padding: 10px; width: 200px;">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%;">
+            {% endif %}
+            <h4><a href="/product/{{ product.id }}/">{{ product.name }}</a></h4>
+            <p>Ціна: {{ product.price }} грн</p>
+        </div>
+    {% empty %}
+        <p>У цій категорії поки немає товарів.</p>
+    {% endfor %}
+</div>

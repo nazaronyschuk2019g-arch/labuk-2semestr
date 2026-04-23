@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'my_pages', # <--- просто додай цей один рядок і не забудь кому!
+    'my_pages',  # <--- ДОДАЙ ЦЕЙ РЯДОК
 ]
 
 MIDDLEWARE = [
@@ -117,4 +117,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Додай ці два рядки:
+MEDIA_URL = '/media/'
+import os
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
