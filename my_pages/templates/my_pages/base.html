@@ -2,88 +2,132 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud City Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Базові стилі, щоб сайт виглядав охайно */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; background-color: #f9f9f9;}
-
-        /* Стилі Хедера */
-        header { background-color: #1a1a1a; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        header a { color: white; text-decoration: none; margin-left: 20px; font-weight: bold; transition: color 0.3s;}
-        header a:hover { color: #00d2ff; }
-        .logo { font-size: 1.5em; font-weight: 900; color: #00d2ff; text-transform: uppercase; letter-spacing: 2px;}
-
-        /* Стилі меню категорій */
-        .categories-menu { background-color: #333; padding: 10px 30px; color: white; font-size: 0.9em;}
-        .categories-menu a { color: #ccc; text-decoration: none; margin-right: 15px; border-bottom: 1px solid transparent;}
-        .categories-menu a:hover { color: white; border-bottom: 1px solid white;}
-
-        /* Основний контент */
-        main { flex: 1; padding: 30px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box;}
-
-        /* Сітка товарів */
-        .products-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;}
-        .product-card { background: white; border: 1px solid #eee; padding: 20px; border-radius: 10px; width: calc(33.333% - 20px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); box-sizing: border-box;}
-        .product-brand { color: #888; font-size: 0.8em; text-transform: uppercase;}
-        .product-name { font-size: 1.2em; margin: 10px 0; color: #222;}
-        .product-price { color: #00d2ff; font-size: 1.4em; font-weight: bold; margin-top: 15px;}
-
-        /* Стилі Футера */
-        footer { background-color: #111; color: #888; text-align: center; padding: 30px 20px; margin-top: auto; border-top: 3px solid #00d2ff;}
-        footer p { margin: 5px 0;}
+        /* Стилі для підвалу, щоб текст точно не зливався з фоном */
+        .site-footer {
+            background-color: #212529; /* Темний фон, як у шапки */
+            color: #ffffff; /* Білий текст за замовчуванням */
+        }
+        .site-footer h5 {
+            color: #ffffff; /* Заголовки колонок точно білі */
+        }
+        .site-footer p, .site-footer ul li {
+            color: #adb5bd; /* Світло-сірий текст для описів та списків */
+        }
+        .site-footer a {
+            color: #adb5bd; /* Колір посилань */
+            text-decoration: none;
+        }
+        .site-footer a:hover {
+            color: #ffffff; /* Білий колір при наведенні на посилання */
+        }
+        .site-footer hr {
+            border-color: #495057; /* Колір лінії роздільника */
+        }
+        .site-footer .bottom-text {
+            color: #6c757d; /* Темніший сірий для копірайту */
+        }
+        /* Кнопки соцмереж */
+        .social-btn {
+            color: #ffffff;
+            border: 1px solid #6c757d;
+        }
+        .social-btn:hover {
+            color: #ffffff;
+            background-color: #495057;
+        }
     </style>
 </head>
-<body>
+<body class="bg-light d-flex flex-column min-vh-100">
 
-    <header>
-        <div class="logo">
-            <a href="{% url 'home' %}" style="margin: 0;">☁️ Cloud City</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'product_list' %}">☁️ Cloud City Shop</a>
+            <div class="ms-auto">
+                <a href="{% url 'cart_detail' %}" class="btn btn-outline-light">🛒 Кошик</a>
+            </div>
         </div>
-        <nav>
-            <a href="{% url 'home' %}">Вітрина</a>
-            <a href="{% url 'page1' %}">Про магазин</a>
-            <a href="{% url 'page2' %}">Контакти</a>
-        </nav>
-    </header>
+    </nav>
 
-    <div class="categories-menu">
-        <span style="margin-right: 15px; color: #00d2ff;">Каталог:</span>
-        {% for cat in categories %}
-            <a href="#">{{ cat.name }}</a>
-        {% empty %}
-            <span>Додайте категорії в адмінці</span>
-        {% endfor %}
+    <div class="container flex-grow-1">
+        {% block content %}
+        {% endblock %}
     </div>
 
-    <main>
-        <h1>{{ title }}</h1>
+    <footer class="site-footer py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4">
 
-        {% if is_main %}
-            <p>Обирай найкраще з нашого асортименту:</p>
-
-            <div class="products-grid">
-                {% for product in products %}
-                    <div class="product-card">
-                        <div class="product-brand">{{ product.brand.name }} | {{ product.category.name }}</div>
-                        <div class="product-name">{{ product.name }}</div>
-                        <div class="product-price">{{ product.price }} ₴</div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold text-uppercase mb-3">☁️ Cloud City Shop</h5>
+                    <p class="small">
+                        Ваш надійний магазин з 2024 року. Ми починали з невеликого Telegram-ком'юніті, а зараз пропонуємо найкращий асортимент з доставкою по всій Україні.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="social-btn rounded px-3 py-1 small">Telegram</a>
+                        <a href="#" class="social-btn rounded px-3 py-1 small">Instagram</a>
                     </div>
-                {% empty %}
-                    <p>Товарів поки немає. Зайди в адмінку та додай кілька!</p>
-                {% endfor %}
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold text-uppercase mb-3">Клієнтам</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#">Доставка та оплата</a></li>
+                        <li class="mb-2"><a href="#">Обмін та повернення</a></li>
+                        <li class="mb-2"><a href="#">Договір оферти</a></li>
+                        <li class="mb-2"><a href="#">Часті питання (FAQ)</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-12">
+                    <h5 class="fw-bold text-uppercase mb-3">Контакти</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">📍 м. Луцьк, Волинська область</li>
+                        <li class="mb-2">📞 +380 99 123 45 67
+
+                        <div class="modal fade" id="ageVerificationModal" tabindex="-1" aria-labelledby="ageModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center py-5 shadow-lg border-0">
+                <div class="modal-body">
+                    <h1 class="display-1 mb-3">🔞</h1>
+                    <h3 class="fw-bold mb-3">Увага!</h3>
+                    <p class="text-muted mb-4 px-3">
+                        Вхід на сайт дозволено лише особам, які досягли 18 років. <br> Підтвердіть свій вік.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-outline-danger px-4" id="btn-no-18">Мені немає 18</button>
+                        <button type="button" class="btn btn-success px-4 shadow" id="btn-yes-18">Так, мені є 18</button>
+                    </div>
+                </div>
             </div>
-
-        {% else %}
-            <p>Тут буде інформація для додаткових сторінок.</p>
-            <br>
-            <a href="{% url 'home' %}" style="color: #00d2ff; text-decoration: none; font-weight: bold;">⬅ Повернутися до покупок</a>
-        {% endif %}
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Cloud City Shop. Всі права захищені.</p>
-        <p>Твій найкращий вейп-шоп у Луцьку!</p>
+        </div>
+    </div>
+                        ...
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('ageVerified')) {
+                var ageModal = new bootstrap.Modal(document.getElementById('ageVerificationModal'));
+                ageModal.show();
+            }
+
+            document.getElementById('btn-yes-18').addEventListener('click', function() {
+                localStorage.setItem('ageVerified', 'true');
+                var modalInstance = bootstrap.Modal.getInstance(document.getElementById('ageVerificationModal'));
+                modalInstance.hide();
+            });
+
+            document.getElementById('btn-no-18').addEventListener('click', function() {
+                window.location.href = "https://www.google.com/search?q=дитячі+іграшки";
+            });
+        });
+    </script>
 
 </body>
 </html>

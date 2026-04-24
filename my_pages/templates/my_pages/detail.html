@@ -1,14 +1,48 @@
-<h1>{{ product.name }}</h1>
-<p>Категорія: {{ product.category.name }}</p>
+{% extends 'my_pages/base.html' %}
 
-{% if product.image %}
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px;">
-{% endif %}
+{% block content %}
+<div class="card shadow-sm border-0 mb-4 bg-white">
+    <div class="row g-0">
+        <div class="col-md-5">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.name }}" style="object-fit: cover; height: 100%; min-height: 300px;">
+            {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center h-100 min-vh-25">Немає фото</div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-7">
+            <div class="card-body p-4 d-flex flex-column h-100">
+                <span class="badge bg-secondary mb-2" style="width: fit-content;">{{ product.category.name }}</span>
+                <h2 class="card-title fw-bold mb-3">{{ product.name }}</h2>
+                <h3 class="text-success fw-bold mb-4">{{ product.price }} грн</h3>
+                <p class="card-text text-muted mb-4">{{ product.description|default:"Опис відсутній." }}</p>
+                
+                <div class="mt-auto">
+                    <form action="{% url 'add_to_cart' product.id %}" method="post" class="mb-4">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">🛒 Додати в кошик</button>
+                    </form>
 
-<p>{{ product.description }}</p>
-<h2>Ціна: {{ product.price }} грн</h2>
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold">Середній рейтинг:</span>
+                        <span class="badge bg-warning text-dark fs-6">
+                            ⭐ {% if avg_rating %}{{ avg_rating }}{% else %}Немає оцінок{% endif %}
+                        </span>
+                    </div>
 
-<button disabled style="padding: 10px 20px; background-color: grey; color: white;">Купити</button>
-
-<br><br>
-<a href="/">Повернутися до списку</a>
+                    <form method="post" class="d-flex gap-2 align-items-center">
+                        {% csrf_token %}
+                        <div class="flex-grow-1">
+                            {{ rating_form.score }}
+                        </div>
+                        <button type="submit" name="rating_submit" class="btn btn-outline-warning text-dark fw-bold">Оцінити</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
