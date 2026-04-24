@@ -1,0 +1,45 @@
+{% extends 'my_pages/base.html' %}
+
+{% block content %}
+<div class="card shadow-sm p-4 bg-white">
+    <h2 class="mb-4">👋 Привіт, {{ user.username }}!</h2>
+    <p class="text-muted">Ти ввійшов як: {% if user.is_staff %}<span class="badge bg-danger">Адміністратор</span>{% else %}<span class="badge bg-primary">Клієнт</span>{% endif %}</p>
+    
+    <div class="mt-4">
+        <a href="{% url 'password_change' %}" class="btn btn-sm btn-outline-secondary">Змінити пароль</a>
+        <a href="{% url 'password_reset' %}" class="btn btn-sm btn-outline-danger">Забули пароль? (Email)</a>
+    </div>
+
+    <hr class="my-4">
+
+    <h3>📦 Історія замовлень</h3>
+    {% if orders %}
+        <div class="table-responsive mt-3">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        {% if user.is_staff %}<th>Клієнт</th>{% endif %}
+                        <th>Товари</th>
+                        <th>Сума</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        {% if user.is_staff %}<td>{{ order.user.username }}</td>{% endif %}
+                        <td>{{ order.items_summary }}</td>
+                        <td class="fw-bold">{{ order.total_price }} грн</td>
+                        <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mt-3">Замовлень поки немає.</p>
+    {% endif %}
+</div>
+{% endblock %}

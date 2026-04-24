@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User  # Ось цей імпорт вирішує проблему!
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Назва категорії")
@@ -33,3 +34,12 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.score} зірок"
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    items_summary = models.TextField(verbose_name="Товари")
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сума")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
+
+    def __str__(self):
+        return f"Замовлення #{self.id} - {self.user.username}"

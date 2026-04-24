@@ -1,8 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Avg
-from .models import Category, Product
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+
+from .models import Category, Product, Order
 from .forms import RatingForm, NewsletterForm
 
+
+# --- ЛОГІКА МАГАЗИНУ (Лаби 6-7) ---
 
 def product_list(request, category_id=None):
     category = None
@@ -75,3 +80,25 @@ def subscribe(request):
         if form.is_valid():
             form.save()
     return redirect('product_list')
+
+
+# --- ЛОГІКА КОРИСТУВАЧІВ (Лаба 8) ---
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    if request.user.is_staff:  # Якщо зайшов адмін
+        orders = Order.objects.all().order_by('-created_at')
+    else:  # Якщо звичайний юзер
+        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'my_pages/profile.html', {'orders': orders})

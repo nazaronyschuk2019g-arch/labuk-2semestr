@@ -115,3 +115,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Куди перенаправляти після входу/виходу
+LOGIN_REDIRECT_URL = 'product_list'
+LOGOUT_REDIRECT_URL = 'product_list'
+
+# Налаштування Email для розробки (вивід у консоль)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
